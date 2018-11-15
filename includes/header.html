@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+    <header>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=devce-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>
+            <?php if(isset($page_title)){
+                echo $page_title;
+                }else{
+                    echo 'Knowledge is Power';
+                } 
+            ?>
+        </title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/sticky-footer-navbar.css" rel="stylesheet">
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    </header>
+    <body>
+        <div id= "wrap">
+            <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="index.php">knowledge is Power</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <?php 
+                    $pages = array (
+                        'Home' => 'index.php',
+                        'About' => '#',
+                        'Contact' => '#',
+                        'Register' => 'register.php'
+                    );
+                    $this_page = basename($_SERVER['PHP_SELF']);
+                    foreach($pages as $k => $v){
+                        echo '<li class="nav-item"';
+                        if($this_page ==$v) {echo 'class = "active"';}
+                        echo '><a class="nav-link"  href="'.$v.'">'.$k.'</a></li>';
+                    }
+                    if(isset($_SESSION['user_id'])){
+                        echo  '<li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Account
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="Logout.php">Logout</a>
+                                    <a class="dropdown-item" href="renew.php">Renew</a>
+                                    <a class="dropdown-item" href="change_password.php">Change Password</a>
+                                    <a class="dropdown-item" href="favorite.php">Favorites</a>
+                                    <a class="dropdown-item" href="recommendations.php">Recommendations</a>
+                                </div>
+                                </li>';
+                    }
+                    if(isset($_SESSION['user_admin'])){
+                        echo  '<li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Admin
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <a class="dropdown-item" href="add_page.php">Add Page</a>
+                                        <a class="dropdown-item" href="add_pdf.php">Add PDF</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </li>';
+                    }
+                    ?>
+                </ul>
+                </div>
+            </nav>
+            <br><br><br>
+            <div class="container">
+                <div class="row">
+                    <div class="col-3">
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-dark">
+                                Content
+                            </li>
+                            <?php 
+                                $sql = "SELECT * FROM categories ORDER BY category";
+                                $r = mysqli_query($dbc,$sql);
+                                while(list($id,$category)=mysqli_fetch_array($r,MYSQLI_NUM)){
+                                    echo '<li class="list-group-item"><a href="category.php?id='.$id.'"
+                                         title="'.$category.'">'.htmlspecialchars($category).'</a></li>'; 
+                                }
+                            ?>
+                            
+                        </ul>
+                        <?php 
+                        //if(!isset($_SESSION['user-id'])){
+                        //    require_once('includes/login_form.inc.php');
+                        //}
+                        ?> 
+                        
+                    </div>
+                    <div class="col-3">
+                    <!-- Content-->
